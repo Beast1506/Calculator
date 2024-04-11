@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Calculator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/10.6.4/math.min.js"
+        integrity="sha512-iphNRh6dPbeuPGIrQbCdbBF/qcqadKWLa35YPVfMZMHBSI6PLJh1om2xCTWhpVpmUyb4IvVS9iYnnYMkleVXLA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+        table {
+            border: 1px solid black;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        input[type="button"] {
+            width: 100%;
+            padding: 20px 40px;
+            background-color: green;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+        }
+
+        input[type="text"] {
+            padding: 20px 30px;
+            font-size: 24px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            border: 2px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <table id="calcu">
+        <tr>
+            <td colspan="3"><input type="text" id="result" readonly></td>
+            <td><input type="button" value="C" id="clear"></td>
+        </tr>
+        <tr>
+            <td><input type="button" value="1"></td>
+            <td><input type="button" value="2"></td>
+            <td><input type="button" value="3"></td>
+            <td><input type="button" value="/"></td>
+        </tr>
+        <tr>
+            <td><input type="button" value="4"></td>
+            <td><input type="button" value="5"></td>
+            <td><input type="button" value="6"></td>
+            <td><input type="button" value="*"></td>
+        </tr>
+        <tr>
+            <td><input type="button" value="7"></td>
+            <td><input type="button" value="8"></td>
+            <td><input type="button" value="9"></td>
+            <td><input type="button" value="-"></td>
+        </tr>
+        <tr>
+            <td><input type="button" value="0"></td>
+            <td><input type="button" value="."></td>
+            <td><input type="button" value="="></td>
+            <td><input type="button" value="+"></td>
+        </tr>
+    </table>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const result = document.getElementById("result");
+            const clearBtn = document.getElementById("clear");
+
+            document.querySelectorAll('input[type="button"]').forEach(button => {
+                button.addEventListener('click', function () {
+                    const value = this.value;
+                    if (value === '=') {
+                        solve();
+                    } else if (value === 'C') {
+                        clear();
+                    } else {
+                        appendToResult(value);
+                    }
+                });
+            });
+
+            document.addEventListener('keydown', function (event) {
+                const key = event.key;
+                if (/[\d\.+\-*/]/.test(key)) {
+                    appendToResult(key);
+                } else if (key === 'Enter') {
+                    solve();
+                }
+            });
+
+            function appendToResult(val) {
+                result.value += val;
+            }
+
+            function solve() {
+                try {
+                    result.value = math.evaluate(result.value);
+                } catch (error) {
+                    result.value = 'Error';
+                }
+            }
+
+            function clear() {
+                result.value = '';
+            }
+        });
+    </script>
+</body>
+
+</html>
